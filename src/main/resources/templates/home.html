@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>nCovi19 Stat</title>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet">
+</head>
+
+<body>
+    <div class="row">
+        <h1>Corona virus tracker application</h1>
+    </div>
+    <div class="row">
+        <p>This is a latest confirm case of Corona virus Global - Data confirmed by CSSEGI.
+    </div>
+        <div class="row">
+            <!--  This is the main tab  -->
+            <div class="col">
+                <div class="container">
+                    <div class="jumbotron">
+                        <div class="row">
+                            <div scope="col">
+                                <h1 class="display-4" th:text="${totalCaseReported}"></h1>
+                                <p class="lead">Total cases reported in the world.</p>
+
+
+                                <hr class="my-4">
+                            </div>
+                            <div scope="col">
+                                <h1 class="display-4" th:text="${totalNewCaseReported}"></h1>
+                                <p class="lead">Total new cases today.</p>
+                                <hr class="my-4">
+                                <a class="btn btn-primary btn-lg"
+                                    href="https://github.com/CSSEGISandData/COVID-19/blob/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv"
+                                    role="button" target="_blank">Visit CSSEGI</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container">
+                    <table class="table">
+                        <tr>
+                            <th>State</th>
+                            <th>Country</th>
+                            <th>Total cases</th>
+                            <th>Different from Yesterday</th>
+                        </tr>
+                        <tr th:each="locationStat : ${locationStats}">
+                            <td th:text="${locationStat.state}"></td>
+                            <td th:text="${locationStat.country}"></td>
+                            <td th:text="${locationStat.latestTotalCases}">0</td>
+                            <td th:text="${locationStat.diffFromYesterday}">0</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!--  This is the map field  -->
+            <div class="col">
+                <div>
+                    <iframe width="650" height="400" frameborder="0" scrolling="no"
+                            marginheight="0" marginwidth="0" title="2019-nCoV"
+                            src="//arcgis.com/apps/Embed/index.html?webmap=14aa9e5660cf42b5b4b546dec6ceec7c&extent=77.3846,11.535,163.5174,52.8632&zoom=true&previewImage=false&scale=true&disable_scroll=true&theme=light"
+                    ></iframe>
+                </div>
+            </div>
+
+        </div>
+
+
+</body>
+
+</html>
