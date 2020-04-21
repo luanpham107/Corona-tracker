@@ -7,50 +7,96 @@
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
     <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet">
+    <link rel="stylesheet" href="css/custom.css">
+    <link rel="stylesheet" href="css/scrollbar-custom.css">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css">
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+
 </head>
 
 <body>
-    <div class="row">
-        <h1>Corona virus tracker application</h1>
+    <div class="navbar navbar-default">
+        <div class="container">
+            <div class="navbar-header">
+                <div class="logo"><a href="/" class="navbar-brand"><img src="images/logo-sm.png" border="0" title="nCoV19 Stats"></a>
+                </div>                
+            </div>
+            <div class="navbar-collapse collapse" id="navbar-main">
+                <ul class="nav navbar-nav">
+                    <li><a href="/#"><span style="color:#FF9900; font-weight:bold">Coronavirus</span></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
-    <div class="row">
-        <p>This is a latest confirm case of Corona virus Global - Data confirmed by CSSEGI.
-    </div>
+    <div class="container">
+        <div class="row">
+            <div style="margin-top:10px; margin-bottom:10px; text-align: left">                
+            </div>
+        </div>
+        <div class="row">
+        </div>
         <div class="row">
             <!--  This is the main tab  -->
-            <div class="col">
-                <div class="container">
-                    <div class="jumbotron">
-                        <div class="row">
-                            <div scope="col">
-                                <h1 class="display-4" th:text="${totalCaseReported}"></h1>
-                                <p class="lead">Total cases reported in the world.</p>
-
-
-                                <hr class="my-4">
-                            </div>
-                            <div scope="col">
-                                <h1 class="display-4" th:text="${totalNewCaseReported}"></h1>
-                                <p class="lead">Total new cases today.</p>
-                                <hr class="my-4">
-                                <a class="btn btn-primary btn-lg"
-                                    href="https://github.com/CSSEGISandData/COVID-19/blob/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv"
-                                    role="button" target="_blank">Visit CSSEGI</a>
-                            </div>
+            <div class="col-md-8">
+                <div class="container-iner">
+                    <div class="label-counter" id="page-top">COVID-19 Coronavirus Pandemic</div>
+                    <div style="font-size:13px; color:#999; margin-top:5px; text-align:center">
+                        Last updated: April 21, 2020, 01:57 GMT
+                    </div>
+                    <div style="margin-top:20px; text-align:center; font-size:14px">
+                        <a href="/#"> </a><a href="/#">Graphs</a> - <a href="/#">Countries</a> - <a href="/#">Death
+                            Rate</a> - <a href="/#">Symptoms</a> - <a href="/#">Incubation</a> -<strong>
+                        </strong><strong> </strong><a href="/#">Transmission</a> - <a href="/#">News</a>
+                    </div>
+                    <div id="maincounter-wrap" style="margin-top:15px">
+                        <h1>Coronavirus Cases:</h1>
+                        <div class="maincounter-number">
+                            <span style="color:#DC3545" th:text="${totalCaseReported}"></span>
                         </div>
                     </div>
+                    <div id="maincounter-wrap" style="margin-top:15px">
+                        <h1>Today Cases:</h1>
+                        <div class="maincounter-number">
+                            <span style="color: #FFC107;" th:text="${totalNewCaseReported}"></span>
+                        </div>
+                        <a class="btn btn-info btn-sm"
+                            href="https://github.com/CSSEGISandData/COVID-19/blob/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv"
+                            role="button" target="_blank">Visit CSSEGI</a>
+                        <hr>
+                    </div>
                 </div>
-                <div class="container">
+            </div>
+            <!--  This is the map field  -->
+            <div class="col-md-4">
+                <table class="table">
+                    <tr>
+                        <th style="color:#d40a0a">Country (Top 10)</th>
+                        <th style="color:#d40a0a">Today</th>
+                    </tr>
+                    <tr th:each="top10CasesStat : ${top10CasesStats}">
+                        <td th:text="${top10CasesStat.country}"></td>
+                        <td th:text="${top10CasesStat.diffFromYesterday}">0</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8">
+                <div class="label-counter" id="page-top">All</div>
+                <div class="card example-1 square scrollbar-ripe-malinka">
                     <table class="table">
                         <tr>
-                            <th>State</th>
-                            <th>Country</th>
+                            <th>Country (All)</th>
+                            <!--                        <th>State</th>-->
                             <th>Total cases</th>
-                            <th>Different from Yesterday</th>
+                            <th>Today</th>
                         </tr>
                         <tr th:each="locationStat : ${locationStats}">
-                            <td th:text="${locationStat.state}"></td>
                             <td th:text="${locationStat.country}"></td>
+                            <!--                        <td th:text="${locationStat.state}"></td>-->
                             <td th:text="${locationStat.latestTotalCases}">0</td>
                             <td th:text="${locationStat.diffFromYesterday}">0</td>
                         </tr>
@@ -58,17 +104,26 @@
                 </div>
             </div>
 
-            <!--  This is the map field  -->
-            <div class="col">
-                <div>
-                    <iframe width="650" height="400" frameborder="0" scrolling="no"
-                            marginheight="0" marginwidth="0" title="2019-nCoV"
-                            src="//arcgis.com/apps/Embed/index.html?webmap=14aa9e5660cf42b5b4b546dec6ceec7c&extent=77.3846,11.535,163.5174,52.8632&zoom=true&previewImage=false&scale=true&disable_scroll=true&theme=light"
-                    ></iframe>
-                </div>
+            <div class="col-md-4">
+                <div class="label-counter" id="page-top">Less</div>
+                <table class="table">
+                    <tr>
+                        <th style="color:#03db44">Country (Top Fighter)</th>
+                        <th style="color:#03db44">Today</th>
+                    </tr>
+                    <tr th:each="top10RecoverStat : ${top10RecoverStats}">
+                        <td th:text="${top10RecoverStat.country}"></td>
+                        <td th:text="${top10RecoverStat.diffFromYesterday}">0</td>
+                    </tr>
+                </table>
             </div>
-
         </div>
+        <div class="row">
+            <div style="margin-top:20px; margin-bottom:40px; text-align: center">
+                <div class="label-counter" id="page-top">COVID-19 Coronavirus Charts</div>
+            </div>
+        </div>
+    </div>
 
 
 </body>

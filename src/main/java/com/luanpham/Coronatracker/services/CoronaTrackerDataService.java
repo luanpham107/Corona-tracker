@@ -1,5 +1,6 @@
 package com.luanpham.Coronatracker.services;
 
+import com.luanpham.Coronatracker.models.CountryComparator;
 import com.luanpham.Coronatracker.models.LocationStats;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
@@ -14,8 +15,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class CoronaTrackerDataService {
@@ -46,6 +46,21 @@ public class CoronaTrackerDataService {
             locationStat.setDiffFromYesterday(latestTotalCases - Integer.parseInt(record.get(record.size() - 2)));
             newStats.add(locationStat);
         }
+
+        Collections.sort(newStats, new CountryComparator());
+        for(int i = 0 ; i < newStats.size() - 1; i++)
+        {
+            LocationStats l1 = newStats.get(i);
+            LocationStats l2 = newStats.get(i+1);
+
+            if(l1.getCountry().equals(l2.getCountry())){
+                newStats.remove(l1);
+                newStats.remove(l2);
+                newStats.add(i, l1.add(l2));
+                i--; // Check again L2
+            }
+        }
+
         this.allStats = newStats;
 
     }
