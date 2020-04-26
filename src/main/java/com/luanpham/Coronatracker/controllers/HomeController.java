@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.*;
 
@@ -21,6 +22,8 @@ public class HomeController {
     @GetMapping("/")
     public String home(Model model){
         List<LocationStats> allStats = coronaTrackerDataService.getAllStats();
+        LocalDateTime TimeGotTheData = coronaTrackerDataService.getDateGotTheData();
+
         Collections.sort(allStats, new DiffTodayComparator());
         // Get from top of the list
         List<LocationStats> top10CasesStats = allStats.subList(0, 10);
@@ -34,6 +37,7 @@ public class HomeController {
         model.addAttribute("locationStats", allStats);
         model.addAttribute("top10CasesStats", top10CasesStats);
         model.addAttribute("top10RecoverStats", top10RecoverStats);
+        model.addAttribute("TimeGotTheData", TimeGotTheData);
         return "home";
     }
 }

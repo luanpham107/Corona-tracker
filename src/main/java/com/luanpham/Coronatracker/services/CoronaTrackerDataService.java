@@ -15,6 +15,9 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.DateTimeException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -22,12 +25,20 @@ public class CoronaTrackerDataService {
     private static String VIRUS_DATA_URL = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv";
 
     private List<LocationStats> allStats = new ArrayList<LocationStats>();
+    public LocalDateTime dateGotTheData;
     public List<LocationStats> getAllStats() {
         return allStats;
     }
+    public LocalDateTime getDateGotTheData() {return dateGotTheData;}
+
     @PostConstruct
     @Scheduled(cron = "10 * * * * *")
     public void fetchVirusData() throws IOException, InterruptedException {
+        // Get date time ưe got the data
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+
+        // Get visrus info
         List<LocationStats> newStats = new ArrayList<>();
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(VIRUS_DATA_URL)).build();
@@ -62,6 +73,7 @@ public class CoronaTrackerDataService {
         }
 
         this.allStats = newStats;
+        this.dateGotTheData = now;
 
     }
 
