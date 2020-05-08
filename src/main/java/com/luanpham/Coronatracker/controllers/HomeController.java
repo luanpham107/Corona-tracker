@@ -29,7 +29,7 @@ public class HomeController {
         List<LocationStats> top10CasesStats = allStats.subList(0, 10);
         // Get from down of the list
         List<LocationStats> top10RecoverStats = allStats.subList(allStats.size() - 10, allStats.size());
-//        Collections.reverse(top10RecoverStats);
+        // Collections.reverse(top10RecoverStats);
         int totalCaseReported =  allStats.stream().mapToInt(stat -> stat.getLatestTotalCases()).sum();
         int totalNewCases =  allStats.stream().mapToInt(stat -> stat.getDiffFromYesterday()).sum();
         model.addAttribute("totalCaseReported", totalCaseReported);

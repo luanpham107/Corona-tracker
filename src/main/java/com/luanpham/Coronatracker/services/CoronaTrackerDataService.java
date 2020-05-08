@@ -34,11 +34,11 @@ public class CoronaTrackerDataService {
     @PostConstruct
     @Scheduled(cron = "10 * * * * *")
     public void fetchVirusData() throws IOException, InterruptedException {
-        // Get date time ưe got the data
+        // Get date time when we got the data
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
 
-        // Get visrus info
+        // Get online virus info
         List<LocationStats> newStats = new ArrayList<>();
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(VIRUS_DATA_URL)).build();
@@ -47,7 +47,7 @@ public class CoronaTrackerDataService {
         StringReader csvBodyReader = new StringReader(httpResponse.body());
         Iterable<CSVRecord> records = CSVFormat.RFC4180.withFirstRecordAsHeader().parse(csvBodyReader);
 
-
+        // Select by Country, Region and Dead to day
         for (CSVRecord record : records) {
             LocationStats locationStat = new LocationStats();
             locationStat.setState(record.get("Province/State"));
@@ -58,6 +58,8 @@ public class CoronaTrackerDataService {
             newStats.add(locationStat);
         }
 
+        // Sort and find duplicate contry in the list
+        // If duplicate found, combine them together
         Collections.sort(newStats, new CountryComparator());
         for(int i = 0 ; i < newStats.size() - 1; i++)
         {

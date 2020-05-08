@@ -67,9 +67,5 @@ public class LocationStats {
                 this.getDiffFromYesterday() + b.getDiffFromYesterday());
     }
 
-//    @Override
-//    public int compareTo(LocationStats o) {
-//        return o.getDiffFromYesterday() - this.getDiffFromYesterday();
-//    }
 }
 
